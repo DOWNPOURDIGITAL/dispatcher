@@ -1,5 +1,7 @@
 # @downpourdigital/dispatcher
 
+![npm bundle size](https://img.shields.io/bundlephobia/minzip/@downpourdigital/dispatcher/latest.svg?color=green&style=for-the-badge) ![Dependencies](https://img.shields.io/david/DOWNPOURDIGITAL/dispatcher.svg?color=green&style=for-the-badge) ![npm version](https://img.shields.io/npm/v/@downpourdigital/dispatcher.svg?style=for-the-badge)
+
 Async event dispatcher.
 
 # Installation
