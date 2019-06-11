@@ -1,0 +1,46 @@
+{
+  "name": "@downpourdigital/dispatcher",
+  "version": "0.0.1",
+  "main": "dist/index.js",
+  "description": "Async event dispatcher.",
+  "author": "johh <code@johh.net>",
+  "license": "MIT",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DOWNPOURDIGITAL/dispatcher.git"
+  },
+  "homepage": "https://github.com/DOWNPOURDIGITAL/dispatcher#readme",
+  "keywords": [
+    "async",
+    "event",
+    "dispatcher",
+    "task",
+    "subscription"
+  ],
+  "scripts": {
+    "build": "rollup -c && npm run declaration",
+    "declaration": "tsc --emitDeclarationOnly",
+    "type-check": "tsc --noEmit",
+    "dev": "rollup -c -w"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "@babel/plugin-proposal-class-properties": "^7.4.4",
+    "@babel/plugin-proposal-object-rest-spread": "^7.4.4",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/preset-typescript": "^7.3.3",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.16.0",
+    "rollup": "^1.14.6",
+    "rollup-plugin-babel": "^4.3.2",
+    "rollup-plugin-typescript": "^1.0.1",
+    "tslib": "^1.10.0",
+    "tslint": "^5.17.0",
+    "tslint-config-airbnb": "^5.11.1",
+    "tslint-react": "^4.0.0",
+    "typescript": "^3.5.1"
+  },
+  "dependencies": {}
+}
