@@ -45,6 +45,8 @@ event.promise.then( () => console.log( 'all callbacks fired' ) );
 
 // to cancel an event before it finished, run:
 event.cancel();
+// or
+trigger.cancelAll();
 
 // to unsubscribe, run:
 subscription.unsubscribe();
