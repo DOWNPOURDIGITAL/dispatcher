@@ -41,8 +41,10 @@ export default class RunningEvent<PayloadType> {
 
 
 	cancel(): void {
-		this.canceled = true;
-		this.cancelFunctions.forEach( f => f() );
-		if ( this.reject ) this.reject();
+		if ( !this.canceled ) {
+			this.canceled = true;
+			this.cancelFunctions.forEach( f => f() );
+			if ( this.reject ) this.reject();
+		}
 	}
 }
