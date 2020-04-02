@@ -1,6 +1,6 @@
 {
   "name": "@downpourdigital/dispatcher",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "dist/index.js",
   "description": "Async event dispatcher.",
   "author": "johh <code@johh.net>",
