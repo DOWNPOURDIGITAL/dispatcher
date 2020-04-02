@@ -1,29 +1,41 @@
 import Subscription from './Subscription';
 
 
+interface Listener<T> {
+	subscription: Subscription<T>,
+	cancel?: Function,
+}
+
+
 export default class RunningEvent<PayloadType> {
-	private cancelFunctions: Function[] = [];
 	private canceled: boolean = false;
 	private isAccumulating: boolean = true;
-	private listeners: Subscription<PayloadType>[] = [];
+	private listeners: Listener<PayloadType>[] = [];
+	private completedListeners: Listener<PayloadType>[] = [];
 	private resolve?: Function;
 	private reject?: Function;
+	private mayCancelAfterCallback: boolean;
 	public promise: Promise<void>;
 
 
-	constructor( listeners: Subscription<PayloadType>[], payload?: PayloadType ) {
+	constructor(
+		listeners: Subscription<PayloadType>[],
+		payload?: PayloadType,
+		mayCancelAfterCallback?: boolean,
+	) {
+		this.mayCancelAfterCallback = !!mayCancelAfterCallback;
+
 		this.promise = new Promise( ( resolve, reject ) => {
 			this.resolve = resolve;
 			this.reject = reject;
 		});
 
-		this.listeners = listeners.slice( 0 );
 		listeners.forEach( ( s ) => {
-			const cancelFunc = s.observer( () => { this.completeCallback( s ); }, payload );
-
-			if ( cancelFunc ) {
-				this.cancelFunctions.push( cancelFunc );
-			}
+			const cancel = s.observer(() => { this.completeCallback(s); }, payload) || undefined;
+			this.listeners.push({
+				subscription: s,
+				cancel,
+			})
 		});
 		this.isAccumulating = false;
 
@@ -33,7 +45,14 @@ export default class RunningEvent<PayloadType> {
 
 	private completeCallback( subscription: Subscription<PayloadType> ): void {
 		if ( !this.canceled ) {
-			this.listeners.splice( this.listeners.findIndex( s => s === subscription ), 1 );
+			const [listener] = this.listeners.splice(
+				this.listeners.findIndex( l => l.subscription === subscription ),
+				1
+			);
+
+			if ( this.mayCancelAfterCallback ) {
+				this.completedListeners.push( listener )
+			}
 
 			if ( this.listeners.length === 0 && !this.isAccumulating && this.resolve ) this.resolve();
 		}
@@ -43,7 +62,17 @@ export default class RunningEvent<PayloadType> {
 	cancel(): void {
 		if ( !this.canceled ) {
 			this.canceled = true;
-			this.cancelFunctions.forEach( f => f() );
+
+			this.listeners.forEach( listener => {
+				if ( listener.cancel ) listener.cancel();
+			} );
+
+			if (this.mayCancelAfterCallback) {
+				this.completedListeners.forEach( listener => {
+					if ( listener.cancel ) listener.cancel();
+				});
+			}
+
 			if ( this.reject ) this.reject();
 		}
 	}
