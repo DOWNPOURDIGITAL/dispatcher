@@ -12,7 +12,7 @@ export default class EventDispatcher<PayloadType> extends Subscribable<PayloadTy
 	protected mayCancelAfterCallback: boolean;
 
 
-	constructor( props: EventDispatcherProps = {} ) {
+	constructor( props: EventDispatcherProps = {}) {
 		super();
 
 		const {

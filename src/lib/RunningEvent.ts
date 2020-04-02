@@ -2,8 +2,8 @@ import Subscription from './Subscription';
 
 
 interface Listener<T> {
-	subscription: Subscription<T>,
-	cancel?: Function,
+	subscription: Subscription<T>;
+	cancel?: Function;
 }
 
 
@@ -31,11 +31,11 @@ export default class RunningEvent<PayloadType> {
 		});
 
 		listeners.forEach( ( s ) => {
-			const cancel = s.observer(() => { this.completeCallback(s); }, payload) || undefined;
+			const cancel = s.observer( () => { this.completeCallback( s ); }, payload ) || undefined;
 			this.listeners.push({
-				subscription: s,
 				cancel,
-			})
+				subscription: s,
+			});
 		});
 		this.isAccumulating = false;
 
@@ -47,11 +47,11 @@ export default class RunningEvent<PayloadType> {
 		if ( !this.canceled ) {
 			const [listener] = this.listeners.splice(
 				this.listeners.findIndex( l => l.subscription === subscription ),
-				1
+				1,
 			);
 
 			if ( this.mayCancelAfterCallback ) {
-				this.completedListeners.push( listener )
+				this.completedListeners.push( listener );
 			}
 
 			if ( this.listeners.length === 0 && !this.isAccumulating && this.resolve ) this.resolve();
@@ -63,12 +63,12 @@ export default class RunningEvent<PayloadType> {
 		if ( !this.canceled ) {
 			this.canceled = true;
 
-			this.listeners.forEach( listener => {
+			this.listeners.forEach( ( listener ) => {
 				if ( listener.cancel ) listener.cancel();
-			} );
+			});
 
-			if (this.mayCancelAfterCallback) {
-				this.completedListeners.forEach( listener => {
+			if ( this.mayCancelAfterCallback ) {
+				this.completedListeners.forEach( ( listener ) => {
 					if ( listener.cancel ) listener.cancel();
 				});
 			}
