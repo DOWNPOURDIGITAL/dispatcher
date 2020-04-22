@@ -50,7 +50,7 @@ export default class RunningEvent<PayloadType> {
 				1,
 			);
 
-			if ( this.mayCancelAfterCallback ) {
+			if ( this.mayCancelAfterCallback && listener ) {
 				this.completedListeners.push( listener );
 			}
 
