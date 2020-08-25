@@ -7,7 +7,7 @@ interface Listener<T> {
 }
 
 
-export default class RunningEvent<PayloadType> {
+export default class PersistentEvent<PayloadType> {
 	private canceled: boolean = false;
 	private isAccumulating: boolean = true;
 	private listeners: Listener<PayloadType>[] = [];

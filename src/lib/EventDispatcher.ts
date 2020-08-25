@@ -1,5 +1,5 @@
 import Subscribable from './Subscribable';
-import RunningEvent from './RunningEvent';
+import PersistentEvent from './PersistentEvent';
 
 
 interface EventDispatcherProps {
@@ -8,7 +8,7 @@ interface EventDispatcherProps {
 
 
 export default class EventDispatcher<PayloadType> extends Subscribable<PayloadType> {
-	protected events: RunningEvent<PayloadType>[] = [];
+	protected events: PersistentEvent<PayloadType>[] = [];
 	protected mayCancelAfterCallback: boolean;
 
 
@@ -28,8 +28,8 @@ export default class EventDispatcher<PayloadType> extends Subscribable<PayloadTy
 	}
 
 
-	dispatch( payload?: PayloadType ): RunningEvent<PayloadType> {
-		const event = new RunningEvent( this.listeners, payload, this.mayCancelAfterCallback );
+	dispatch( payload?: PayloadType ): PersistentEvent<PayloadType> {
+		const event = new PersistentEvent( this.listeners, payload, this.mayCancelAfterCallback );
 
 		this.events.push( event );
 
