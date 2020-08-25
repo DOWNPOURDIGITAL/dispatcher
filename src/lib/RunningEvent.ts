@@ -1,4 +1,4 @@
-import Subscription from './Subscription';
+import Subscription, { CleanupFunction } from './Subscription';
 
 
 interface Listener<T> {
@@ -31,12 +31,25 @@ export default class RunningEvent<PayloadType> {
 		});
 
 		listeners.forEach( ( s ) => {
-			const cancel = s.observer( () => { this.completeCallback( s ); }, payload ) || undefined;
-			this.listeners.push({
-				cancel,
+			// create and push ref, before executing observer
+			// to avoid potential race condition
+			const ref: {
+				subscription: Subscription<PayloadType>
+				cancel: CleanupFunction | undefined
+			} = {
 				subscription: s,
-			});
+				cancel: undefined,
+			};
+
+			this.listeners.push( ref );
+
+			const cancel = s.observer( () => { this.completeCallback( s ); }, payload ) || undefined;
+
+			// subsequently set cancel function, which should only be called
+			// if callback hasn't already been executed
+			ref.cancel = cancel;
 		});
+
 		this.isAccumulating = false;
 
 		if ( this.listeners.length === 0 && this.resolve ) this.resolve();

@@ -1,7 +1,7 @@
 import Subscribable from './Subscribable';
 
 
-type CleanupFunction = () => void;
+export type CleanupFunction = () => void;
 
 
 export type Observer<PayloadType> =
