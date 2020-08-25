@@ -41,7 +41,7 @@ export default class EventDispatcher<PayloadType> extends Subscribable<PayloadTy
 	}
 
 
-	cancelAll() {
+	cancelAll(): void {
 		this.events.forEach( e => e.cancel() );
 	}
 }

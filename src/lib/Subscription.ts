@@ -1,11 +1,11 @@
-import Subscribable from './Subscribable';
+import type Subscribable from './Subscribable';
 
 
 export type CleanupFunction = () => void;
 
 
 export type Observer<PayloadType> =
-	( callback: Function, payload?: PayloadType ) => CleanupFunction | null;
+	( callback: () => void, payload?: PayloadType ) => CleanupFunction | null;
 
 
 export default class Subscription<PayloadType> {

@@ -3,17 +3,17 @@ import Subscription, { CleanupFunction } from './Subscription';
 
 interface Listener<T> {
 	subscription: Subscription<T>;
-	cancel?: Function;
+	cancel?: () => void;
 }
 
 
 export default class PersistentEvent<PayloadType> {
-	private canceled: boolean = false;
-	private isAccumulating: boolean = true;
+	private canceled = false;
+	private isAccumulating = true;
 	private listeners: Listener<PayloadType>[] = [];
 	private completedListeners: Listener<PayloadType>[] = [];
-	private resolve?: Function;
-	private reject?: Function;
+	private resolve?: () => void;
+	private reject?: () => void;
 	private mayCancelAfterCallback: boolean;
 	public promise: Promise<void>;
 
@@ -34,16 +34,16 @@ export default class PersistentEvent<PayloadType> {
 			// create and push ref, before executing observer
 			// to avoid potential race condition
 			const ref: {
-				subscription: Subscription<PayloadType>
-				cancel: CleanupFunction | undefined
+				subscription: Subscription<PayloadType>;
+				cancel: CleanupFunction | undefined;
 			} = {
 				subscription: s,
-				cancel: undefined,
+				cancel: null,
 			};
 
 			this.listeners.push( ref );
 
-			const cancel = s.observer( () => { this.completeCallback( s ); }, payload ) || undefined;
+			const cancel = s.observer( () => { this.completeCallback( s ); }, payload ) || null;
 
 			// subsequently set cancel function, which should only be called
 			// if callback hasn't already been executed
@@ -67,7 +67,9 @@ export default class PersistentEvent<PayloadType> {
 				this.completedListeners.push( listener );
 			}
 
-			if ( this.listeners.length === 0 && !this.isAccumulating && this.resolve ) this.resolve();
+			if ( this.listeners.length === 0 && !this.isAccumulating && this.resolve ) {
+				this.resolve();
+			}
 		}
 	}
 

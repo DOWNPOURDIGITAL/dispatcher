@@ -5,7 +5,7 @@ import { Subscribable } from '..';
 export type PassiveObserver<PayloadType> = ( payload?: PayloadType ) => void;
 
 
-export default class PassiveSubscription<PayloadType> extends Subscription<PayloadType> {
+export default class PassiveSubscription<PayloadType> extends Subscription<PayloadType> {
 	constructor( observer: PassiveObserver<PayloadType>, subscribable: Subscribable<PayloadType> ) {
 		super(
 			( cb, payload ) => {

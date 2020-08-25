@@ -1,4 +1,7 @@
-import Subscription, { Observer } from './Subscription';
+/* eslint-disable import/no-duplicates */
+/* eslint-disable no-duplicate-imports */
+import type { Observer } from './Subscription';
+import Subscription from './Subscription';
 import PassiveSubscription, { PassiveObserver } from './PassiveSubscription';
 
 

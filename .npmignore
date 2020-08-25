@@ -3,4 +3,5 @@ rollup.config.js
 tsconfig.json
 tslint.json
 .editorconfig
+.eslintrc.js
 yarn.lock
